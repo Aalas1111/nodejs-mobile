@@ -28,6 +28,9 @@
     'node_core_target_name%': 'node',
     'node_lib_target_name%': 'libnode',
     'node_intermediate_lib_type%': 'static_library',
+    # Absolute path injected by android_configure.py. Empty on non-Android
+    # builds so the libnode version script is only applied where requested.
+    'node_version_script%': '',
     'node_builtin_modules_path%': '',
     'linked_module_files': [
     ],
@@ -732,6 +735,11 @@
       'msvs_disabled_warnings!': [4244],
 
       'conditions': [
+        [ 'OS=="android" and node_shared=="true" and node_version_script!=""', {
+          # The Android host only imports node::Start; exporting the full Node/V8
+          # symbol table bloats libnode.so by several MB.
+          'ldflags': [ '-Wl,--version-script=<(node_version_script)' ],
+        }],
         [ 'openssl_default_cipher_list!=""', {
           'defines': [
             'NODE_OPENSSL_DEFAULT_CIPHER_LIST="<(openssl_default_cipher_list)"'

@@ -75,8 +75,9 @@ GYP_DEFINES += " android_target_arch=" + arch
 GYP_DEFINES += " host_os=" + host_os + " OS=android"
 GYP_DEFINES += " ANDROID_NDK_ROOT=" + android_ndk_path
 GYP_DEFINES += " ANDROID_NDK_SYSROOT=" + toolchain_path + "/sysroot"
+GYP_DEFINES += " node_version_script=" + os.path.abspath("tools/libnode-exports.map")
 os.environ['GYP_DEFINES'] = GYP_DEFINES
 
 if os.path.exists("./configure"):
-    # nodejs-mobile patch: added --with-intl=none and --shared
-    os.system("./configure --dest-cpu=" + DEST_CPU + " --dest-os=android --openssl-no-asm --with-intl=none --cross-compiling --shared")
+    # nodejs-mobile patch: added --with-intl=none, --shared and size trims
+    os.system("./configure --dest-cpu=" + DEST_CPU + " --dest-os=android --openssl-no-asm --with-intl=none --without-inspector --without-report --cross-compiling --shared")
