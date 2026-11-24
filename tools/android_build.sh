@@ -29,7 +29,10 @@ BUILD_ARCH() {
 
   # Compile
   eval '"./android-configure" "$ANDROID_NDK_PATH" $ANDROID_SDK_VERSION $TARGET_ARCH'
-  make -j $(getconf _NPROCESSORS_ONLN)
+  # Only build the shared runtime. The default target also builds embedtest,
+  # which needs the Node/V8 symbols that libnode-exports.map intentionally hides.
+  make out/Makefile
+  make -C out -j $(getconf _NPROCESSORS_ONLN) BUILDTYPE=Release libnode
 
   # Move binaries
   TARGET_ARCH_FOLDER="$TARGET_ARCH"
