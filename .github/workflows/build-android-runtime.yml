@@ -1,5 +1,7 @@
 name: Build Nodejs-Mobile Android Runtime
 
+# This file also lives on the node18-trim branch, which is the actual build ref.
+# workflow_dispatch requires it to exist on the default branch as well.
 on:
   workflow_dispatch:
     inputs:
